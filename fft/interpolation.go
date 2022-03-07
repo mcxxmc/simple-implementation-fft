@@ -52,6 +52,34 @@ func Interpolation(ys []complex128) []complex128 {
 	return a
 }
 
+// InterpolationV2 calculates the interpolation, which is the reverse of DFT (or DFT ^ -1).
+//
+// This function is a modification of the iterative FftV2().
+func InterpolationV2(ys []complex128) []complex128 {
+	n := len(ys)
+	a := BitReverse(ys)
+	for s := 1; s <= int(math.Log2(float64(n))); s ++ {
+		m := int(math.Pow(float64(2), float64(s)))
+		tmp := complex(math.Cos(2 * math.Pi / float64(m)), math.Sin(2 * math.Pi / float64(m)))
+		mu := cmplx.Pow(tmp, complex(-1, 0))
+		for k := 0; k <= n - 1; k += m {
+			mul := 1.0 + 0.0i
+			for j := 0; j <= m / 2 - 1; j ++ {
+				t := mul * a[k + j + m / 2]
+				u := a[k + j]
+				a[k + j] = u + t
+				a[k + j + m / 2] = u - t
+				mul = mul * mu
+			}
+		}
+	}
+	nc := complex(float64(n), 0)
+	for i := 0; i < n; i ++ {
+		a[i] = a[i] / nc
+	}
+	return a
+}
+
 // ExtractReals extract the real parts from []complex128.
 func ExtractReals(c []complex128) []float64 {
 	r := make([]float64, len(c))

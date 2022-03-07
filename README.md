@@ -10,4 +10,3 @@ Currently, it assumes that the length of the input to be a power of 2.
 
 ### TODO
 1. enable inputs of variant lengths.
-2. implements Interpolation with a loop.
