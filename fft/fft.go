@@ -12,7 +12,7 @@ func Fft(a []complex128) []complex128 {
 	n := len(a)
 	if n == 1 {
 		// the base case
-		return a
+		return []complex128{a[0]}
 	}
 	// by euler's identity, e ^ ix = cos x + i sin x, where i is the complex symbol
 	// mu = e ^ 2 pi i / n, where x = 2 pi / n
